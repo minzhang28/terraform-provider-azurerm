@@ -22,10 +22,11 @@ func TestAccDataSourceArmStorageContainer_basic(t *testing.T) {
 					resource.TestCheckResourceAttr(data.ResourceName, "container_access_type", "private"),
 					resource.TestCheckResourceAttr(data.ResourceName, "has_immutability_policy", "false"),
 					resource.TestCheckResourceAttr(data.ResourceName, "resource_group_name", "containerdstest-"+data.RandomString),
-					resource.TestCheckResourceAttr(data.ResourceName, "storage_account_name", "acctestsadsc-"+data.RandomString),
-					resource.TestCheckResourceAttr(data.ResourceName, "metadata.#", "1"),
-					resource.TestCheckResourceAttr(data.ResourceName, "metadata.0.k1", "v1"),
-					resource.TestCheckResourceAttr(data.ResourceName, "metadata.0.k2", "v2"),
+					resource.TestCheckResourceAttr(data.ResourceName, "storage_account_name", "acctestsadsc"+data.RandomString),
+					resource.TestCheckResourceAttr(data.ResourceName, "properties.%", "4"),
+					resource.TestCheckResourceAttr(data.ResourceName, "metadata.%", "2"),
+					resource.TestCheckResourceAttr(data.ResourceName, "metadata.k1", "v1"),
+					resource.TestCheckResourceAttr(data.ResourceName, "metadata.k2", "v2"),
 				),
 			},
 		},
@@ -35,7 +36,7 @@ func TestAccDataSourceArmStorageContainer_basic(t *testing.T) {
 func testAccDataSourceAzureRMStorageContainer_basic(data acceptance.TestData) string {
 	return fmt.Sprintf(`
 resource "azurerm_resource_group" "test" {
-  name     = "containerdstest-%d"
+  name     = "containerdstest-%s"
   location = "%s"
 }
 
@@ -63,5 +64,5 @@ data "azurerm_storage_container" "test" {
 	storage_container_id = "${azurerm_storage_container.test.id}"
 }
 
-`, data.RandomInteger, data.Locations.Primary, data.RandomString, data.RandomString)
+`, data.RandomString, data.Locations.Primary, data.RandomString, data.RandomString)
 }

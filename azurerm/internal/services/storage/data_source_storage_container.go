@@ -32,6 +32,11 @@ func dataSourceArmStorageContainer() *schema.Resource {
 				Computed: true,
 			},
 
+			"storage_account_name": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+
 			"container_access_type": {
 				Type:     schema.TypeString,
 				Computed: true,
@@ -86,6 +91,8 @@ func dataSourceArmStorageContainerRead(d *schema.ResourceData, meta interface{})
 	}
 
 	client, err := storageClient.ContainersClient(ctx, *account)
+	d.SetId(client.GetResourceID(id.AccountName, id.ContainerName))
+
 	if err != nil {
 		return fmt.Errorf("Error building Containers Client for Storage Account %q (Resource Group %q): %s", id.AccountName, account.ResourceGroup, err)
 	}
@@ -102,6 +109,8 @@ func dataSourceArmStorageContainerRead(d *schema.ResourceData, meta interface{})
 	}
 
 	d.Set("name", id.ContainerName)
+
+	d.Set("storage_account_name", id.AccountName)
 
 	d.Set("resource_group_name", account.ResourceGroup)
 

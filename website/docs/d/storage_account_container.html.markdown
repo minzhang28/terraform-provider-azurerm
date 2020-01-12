@@ -13,7 +13,7 @@ Use this data source to access information about an existing Storage Container.
 
 ## Example Usage
 
-```terraform
+```hcl
 
 resource "azurerm_storage_container" "test" {
   name                  = "containerdstest-%s"
@@ -29,7 +29,6 @@ resource "azurerm_storage_container" "test" {
 data "azurerm_storage_container" "example" {
 	storage_container_id = "${azurerm_storage_container.test.id}"
 }
-
 ```
 
 ## Argument Reference
